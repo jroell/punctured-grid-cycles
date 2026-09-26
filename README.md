@@ -74,7 +74,7 @@ The sequence uses `H(1) = 0` for the empty graph. The nontrivial cases begin at 
 
 For `n >= 3`, diagonal reflections fix no Hamiltonian cycle, and the Burnside formula is `(H + R180 + 2*R90 + 2*F)/8`, where `F` refers to one specified axial reflection. Quarter-turn symmetry is impossible when `n` is odd. The `n = 2` graph is a single cycle fixed by every square symmetry.
 
-The finite-size ratios do not prove a limiting growth constant, exponent, or unchanged bulk entropy. A term search returning no OEIS match does not establish novelty. The draft cites the established transfer and symmetry methods used for intact grids. This is a local publication package; no arXiv, OEIS, or journal submission has been made.
+The finite-size ratios do not prove a limiting growth constant, exponent, or unchanged bulk entropy. A term search returning no OEIS match does not establish novelty. The draft cites the established transfer and symmetry methods used for intact grids. The code and publication package are hosted at [github.com/jroell/punctured-grid-cycles](https://github.com/jroell/punctured-grid-cycles). No arXiv, OEIS, or journal submission has been made.
 
 See [paper/submission-notes.md](paper/submission-notes.md) for the sequence submission text and the remaining publication decisions.
 

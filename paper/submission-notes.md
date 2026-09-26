@@ -1,6 +1,6 @@
 # Publication package and submission notes
 
-The local package contains an eight-page research-note draft, exact tables, source code under the MIT license, pinned document dependencies, and independent small-case checks. No external submission or public repository has been created.
+The package contains an eight-page research-note draft, exact tables, source code under the MIT license, pinned document dependencies, and independent small-case checks. The public repository is [jroell/punctured-grid-cycles](https://github.com/jroell/punctured-grid-cycles). No arXiv, OEIS, or journal submission has been made.
 
 ## Proposed OEIS entry
 
@@ -26,7 +26,7 @@ The b-file is `results/oeis-bfile.txt`. The CSV also contains intact-grid and ge
 
 ## Paper and repository
 
-Suggested repository name: `punctured-grid-cycles`. The local Git repository can be published under the intended personal account after that destination is selected. Replace local artifact references with the public repository URL before an external submission.
+Repository: [https://github.com/jroell/punctured-grid-cycles](https://github.com/jroell/punctured-grid-cycles). Cite this repository URL when preparing an external submission.
 
 The draft's defensible contributions are the exact punctured-grid table, explicit hole handling, a quarter-turn parity obstruction, reproducible fixed-cycle counts, and exact geometric symmetry classes. Connectivity transfer algorithms and intact-grid symmetry reductions are established work and are cited accordingly.
 
