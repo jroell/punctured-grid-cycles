@@ -1,0 +1,9 @@
+{
+  "platform": "macOS-27.0-arm64-arm-64bit",
+  "machine": "arm64",
+  "compiler": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Library/Developer/CommandLineTools/usr/bin",
+  "flags": "-O3 -std=c++17 -Wall -Wextra",
+  "timing_method": "One run per case, serial execution; not a repeated benchmark.",
+  "machdep.cpu.brand_string": "Apple M4 Max",
+  "hw.memsize": "137438953472"
+}

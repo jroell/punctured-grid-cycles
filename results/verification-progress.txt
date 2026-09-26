@@ -1,0 +1,17 @@
+python3 scripts/verify.py
+PASS all intact-grid counts from both engines match OEIS A003763.
+PASS full DFS 4: {'raw': 1, 'r90': 1, 'r180': 1, 'axis': 1, 'diagonal': 1, 'both_axes': 1, 'orbits': 1, 'all_fixed': [1, 1, 1, 1, 1, 1, 1, 1]}
+PASS full DFS 6: {'raw': 14, 'r90': 0, 'r180': 2, 'axis': 4, 'diagonal': 0, 'both_axes': 2, 'orbits': 3, 'all_fixed': [14, 0, 2, 0, 4, 4, 0, 0]}
+PASS edge-orbit 4 r90: 1; 1 nodes; 0.000s
+PASS edge-orbit 4 r180: 1; 1 nodes; 0.000s
+PASS edge-orbit 4 axis: 1; 1 nodes; 0.000s
+PASS edge-orbit 4 both_axes: 1; 1 nodes; 0.000s
+PASS edge-orbit 6 r90: 0; 9 nodes; 0.001s
+PASS edge-orbit 6 r180: 2; 41 nodes; 0.003s
+PASS edge-orbit 6 axis: 4; 43 nodes; 0.003s
+PASS edge-orbit 6 both_axes: 2; 19 nodes; 0.001s
+PASS edge-orbit 8 r90: 18; 81 nodes; 0.011s
+PASS edge-orbit 8 r180: 398; 2807 nodes; 0.363s
+PASS edge-orbit 8 axis: 436; 4063 nodes; 0.503s
+PASS edge-orbit 8 both_axes: 20; 221 nodes; 0.025s
+PASS all verification checks.

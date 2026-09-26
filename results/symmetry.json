@@ -1,0 +1,289 @@
+[
+  {
+    "n": 2,
+    "side": 4,
+    "raw": "1",
+    "r180": "1",
+    "r90": "1",
+    "axis": "1",
+    "diagonal": "1",
+    "both_axes": "1",
+    "orbits": "1",
+    "classes": {
+      "trivial": "0",
+      "one_axis": "0",
+      "half_turn_only": "0",
+      "both_axes": "0",
+      "quarter_turn": "0",
+      "all_d4": "1"
+    },
+    "measurements": {
+      "half": {
+        "n": 2,
+        "mode": "half",
+        "rotation": "1",
+        "reflection": "1",
+        "peak_states": 1,
+        "seconds": 1e-05,
+        "max_rss_mib": 1.703,
+        "row_profile": "row 1: 1 states\nrow 2: 1 states\n"
+      },
+      "quarter": {
+        "n": 2,
+        "mode": "quarter",
+        "rotation": "1",
+        "reflection": "1",
+        "peak_states": 1,
+        "seconds": 1.2e-05,
+        "max_rss_mib": 1.703,
+        "row_profile": "row 1: 1 states\nrow 2: 1 states\n"
+      }
+    }
+  },
+  {
+    "n": 3,
+    "side": 6,
+    "raw": "14",
+    "r180": "2",
+    "r90": "0",
+    "axis": "4",
+    "diagonal": "0",
+    "both_axes": "2",
+    "orbits": "3",
+    "classes": {
+      "trivial": "1",
+      "one_axis": "1",
+      "half_turn_only": "0",
+      "both_axes": "1",
+      "quarter_turn": "0",
+      "all_d4": "0"
+    },
+    "measurements": {
+      "half": {
+        "n": 3,
+        "mode": "half",
+        "rotation": "2",
+        "reflection": "4",
+        "peak_states": 13,
+        "seconds": 2.4e-05,
+        "max_rss_mib": 1.719,
+        "row_profile": "row 1: 5 states\nrow 2: 6 states\nrow 3: 6 states\n"
+      },
+      "quarter": {
+        "n": 3,
+        "mode": "quarter",
+        "rotation": "0",
+        "reflection": "2",
+        "peak_states": 10,
+        "seconds": 1.7e-05,
+        "max_rss_mib": 1.719,
+        "row_profile": "row 1: 3 states\nrow 2: 6 states\nrow 3: 6 states\n"
+      }
+    }
+  },
+  {
+    "n": 4,
+    "side": 8,
+    "raw": "164102",
+    "r180": "398",
+    "r90": "18",
+    "axis": "436",
+    "diagonal": "0",
+    "both_axes": "20",
+    "orbits": "20676",
+    "classes": {
+      "trivial": "20359",
+      "one_axis": "208",
+      "half_turn_only": "90",
+      "both_axes": "10",
+      "quarter_turn": "9",
+      "all_d4": "0"
+    },
+    "measurements": {
+      "half": {
+        "n": 4,
+        "mode": "half",
+        "rotation": "398",
+        "reflection": "436",
+        "peak_states": 229,
+        "seconds": 0.000143,
+        "max_rss_mib": 1.766,
+        "row_profile": "row 1: 13 states\nrow 2: 136 states\nrow 3: 31 states\nrow 4: 31 states\n"
+      },
+      "quarter": {
+        "n": 4,
+        "mode": "quarter",
+        "rotation": "18",
+        "reflection": "20",
+        "peak_states": 53,
+        "seconds": 4e-05,
+        "max_rss_mib": 1.719,
+        "row_profile": "row 1: 5 states\nrow 2: 25 states\nrow 3: 28 states\nrow 4: 27 states\n"
+      }
+    }
+  },
+  {
+    "n": 5,
+    "side": 10,
+    "raw": "9684216390",
+    "r180": "39598",
+    "r90": "0",
+    "axis": "58198",
+    "diagonal": "0",
+    "both_axes": "138",
+    "orbits": "1210546548",
+    "classes": {
+      "trivial": "1210507584",
+      "one_axis": "29030",
+      "half_turn_only": "9865",
+      "both_axes": "69",
+      "quarter_turn": "0",
+      "all_d4": "0"
+    },
+    "measurements": {
+      "half": {
+        "n": 5,
+        "mode": "half",
+        "rotation": "39598",
+        "reflection": "58198",
+        "peak_states": 1754,
+        "seconds": 0.002068,
+        "max_rss_mib": 2.219,
+        "row_profile": "row 1: 34 states\nrow 2: 637 states\nrow 3: 840 states\nrow 4: 182 states\nrow 5: 182 states\n"
+      },
+      "quarter": {
+        "n": 5,
+        "mode": "quarter",
+        "rotation": "0",
+        "reflection": "138",
+        "peak_states": 295,
+        "seconds": 0.0002,
+        "max_rss_mib": 1.828,
+        "row_profile": "row 1: 8 states\nrow 2: 54 states\nrow 3: 109 states\nrow 4: 163 states\nrow 5: 176 states\n"
+      }
+    }
+  },
+  {
+    "n": 6,
+    "side": 12,
+    "raw": "27867828294632440",
+    "r180": "155368312",
+    "r90": "8650",
+    "axis": "96650662",
+    "diagonal": "0",
+    "both_axes": "6406",
+    "orbits": "3483478580414922",
+    "classes": {
+      "trivial": "3483478493246952",
+      "one_axis": "48322128",
+      "half_turn_only": "38838314",
+      "both_axes": "3203",
+      "quarter_turn": "4325",
+      "all_d4": "0"
+    },
+    "measurements": {
+      "half": {
+        "n": 6,
+        "mode": "half",
+        "rotation": "155368312",
+        "reflection": "96650662",
+        "peak_states": 13192,
+        "seconds": 0.024228,
+        "max_rss_mib": 4.797,
+        "row_profile": "row 1: 89 states\nrow 2: 2990 states\nrow 3: 4702 states\nrow 4: 7011 states\nrow 5: 1115 states\nrow 6: 1115 states\n"
+      },
+      "quarter": {
+        "n": 6,
+        "mode": "quarter",
+        "rotation": "8650",
+        "reflection": "6406",
+        "peak_states": 1868,
+        "seconds": 0.001447,
+        "max_rss_mib": 2.25,
+        "row_profile": "row 1: 13 states\nrow 2: 119 states\nrow 3: 285 states\nrow 4: 784 states\nrow 5: 959 states\nrow 6: 963 states\n"
+      }
+    }
+  },
+  {
+    "n": 7,
+    "side": 14,
+    "raw": "1167509412814480584454378",
+    "r180": "480564699890",
+    "r90": "0",
+    "axis": "308860488706",
+    "diagonal": "0",
+    "both_axes": "201338",
+    "orbits": "145938676601947358766460",
+    "classes": {
+      "trivial": "145938676601672787397469",
+      "one_axis": "154430143684",
+      "half_turn_only": "120141124638",
+      "both_axes": "100669",
+      "quarter_turn": "0",
+      "all_d4": "0"
+    },
+    "measurements": {
+      "half": {
+        "n": 7,
+        "mode": "half",
+        "rotation": "480564699890",
+        "reflection": "308860488706",
+        "peak_states": 93469,
+        "seconds": 0.296602,
+        "max_rss_mib": 18.984,
+        "row_profile": "row 1: 233 states\nrow 2: 14057 states\nrow 3: 26827 states\nrow 4: 45501 states\nrow 5: 47775 states\nrow 6: 7280 states\nrow 7: 7280 states\n"
+      },
+      "quarter": {
+        "n": 7,
+        "mode": "quarter",
+        "rotation": "0",
+        "reflection": "201338",
+        "peak_states": 11500,
+        "seconds": 0.01155,
+        "max_rss_mib": 3.828,
+        "row_profile": "row 1: 21 states\nrow 2: 257 states\nrow 3: 630 states\nrow 4: 1865 states\nrow 5: 4211 states\nrow 6: 6054 states\nrow 7: 6679 states\n"
+      }
+    }
+  },
+  {
+    "n": 8,
+    "side": 16,
+    "raw": "1517021583328338160591145724550850",
+    "r180": "34116385160498522",
+    "r90": "106253220",
+    "axis": "10202488985967222",
+    "diagonal": "0",
+    "both_axes": "41184930",
+    "orbits": "189627697916042276889063633686282",
+    "classes": {
+      "trivial": "189627697916042263258722834310968",
+      "one_axis": "5101244472391146",
+      "half_turn_only": "8529096253265093",
+      "both_axes": "20592465",
+      "quarter_turn": "53126610",
+      "all_d4": "0"
+    },
+    "measurements": {
+      "half": {
+        "n": 8,
+        "mode": "half",
+        "rotation": "34116385160498522",
+        "reflection": "10202488985967222",
+        "peak_states": 673805,
+        "seconds": 7.643353,
+        "max_rss_mib": 257.141,
+        "row_profile": "row 1: 610 states\nrow 2: 66144 states\nrow 3: 154737 states\nrow 4: 299049 states\nrow 5: 326318 states\nrow 6: 348692 states\nrow 7: 49620 states\nrow 8: 49620 states\n"
+      },
+      "quarter": {
+        "n": 8,
+        "mode": "quarter",
+        "rotation": "106253220",
+        "reflection": "41184930",
+        "peak_states": 80508,
+        "seconds": 0.100293,
+        "max_rss_mib": 16.719,
+        "row_profile": "row 1: 34 states\nrow 2: 561 states\nrow 3: 1600 states\nrow 4: 4781 states\nrow 5: 11819 states\nrow 6: 31687 states\nrow 7: 39978 states\nrow 8: 42392 states\n"
+      }
+    }
+  }
+]

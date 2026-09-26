@@ -1,0 +1,21 @@
+{"n":2,"mode":"half","rotation":"1","reflection":"1","peak_states":1,"seconds":0.000010,"max_rss_mib":1.703}
+{"n":2,"mode":"quarter","rotation":"1","reflection":"1","peak_states":1,"seconds":0.000012,"max_rss_mib":1.703}
+PASS n=2: 1 geometric orbits
+{"n":3,"mode":"half","rotation":"2","reflection":"4","peak_states":13,"seconds":0.000024,"max_rss_mib":1.719}
+{"n":3,"mode":"quarter","rotation":"0","reflection":"2","peak_states":10,"seconds":0.000017,"max_rss_mib":1.719}
+PASS n=3: 3 geometric orbits
+{"n":4,"mode":"half","rotation":"398","reflection":"436","peak_states":229,"seconds":0.000143,"max_rss_mib":1.766}
+{"n":4,"mode":"quarter","rotation":"18","reflection":"20","peak_states":53,"seconds":0.000040,"max_rss_mib":1.719}
+PASS n=4: 20676 geometric orbits
+{"n":5,"mode":"half","rotation":"39598","reflection":"58198","peak_states":1754,"seconds":0.002068,"max_rss_mib":2.219}
+{"n":5,"mode":"quarter","rotation":"0","reflection":"138","peak_states":295,"seconds":0.000200,"max_rss_mib":1.828}
+PASS n=5: 1210546548 geometric orbits
+{"n":6,"mode":"half","rotation":"155368312","reflection":"96650662","peak_states":13192,"seconds":0.024228,"max_rss_mib":4.797}
+{"n":6,"mode":"quarter","rotation":"8650","reflection":"6406","peak_states":1868,"seconds":0.001447,"max_rss_mib":2.250}
+PASS n=6: 3483478580414922 geometric orbits
+{"n":7,"mode":"half","rotation":"480564699890","reflection":"308860488706","peak_states":93469,"seconds":0.296602,"max_rss_mib":18.984}
+{"n":7,"mode":"quarter","rotation":"0","reflection":"201338","peak_states":11500,"seconds":0.011550,"max_rss_mib":3.828}
+PASS n=7: 145938676601947358766460 geometric orbits
+{"n":8,"mode":"half","rotation":"34116385160498522","reflection":"10202488985967222","peak_states":673805,"seconds":7.643353,"max_rss_mib":257.141}
+{"n":8,"mode":"quarter","rotation":"106253220","reflection":"41184930","peak_states":80508,"seconds":0.100293,"max_rss_mib":16.719}
+PASS n=8: 189627697916042276889063633686282 geometric orbits
