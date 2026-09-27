@@ -1,0 +1,20 @@
+{
+  "boost_version": "1.92.0",
+  "compiler": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Library/Developer/CommandLineTools/usr/bin",
+  "flags": "-O3 -std=c++17 -Wall -Wextra -I/opt/homebrew/include -DUSE_BOOST_FLAT_MAP",
+  "flat_map": "boost::unordered_flat_map",
+  "reference_partner_revision": "227bd9c67fcc5d82b2a5fcde66435fcf2c513c97",
+  "local_partner_revision": "7272b45a6fdd0ffcadbd1436d428cbe2c527e677",
+  "timing_method": "Single observations on a shared workstation. The raw extension runs are serial within their driver; symmetry and validation jobs sometimes ran concurrently. Backend and implementation changes prevent direct timing comparisons.",
+  "record_convention": "Partner rows with implementation=local-partner-fields use local updates. Other partner rows use whole-frontier decoding and encoding.",
+  "raw_limits": {
+    "seconds_per_case": 1800,
+    "rss_gib": 48,
+    "rss_poll_seconds": 2
+  },
+  "symmetry_limits": {
+    "internal_seconds": 1800,
+    "subprocess_seconds": 1860,
+    "active_states": 50000000
+  }
+}

@@ -1,0 +1,84 @@
+[
+  {
+    "n": 9,
+    "side": 18,
+    "measurements": {
+      "half": {
+        "n": 9,
+        "mode": "half",
+        "rotation": "2811552194264884895872",
+        "reflection": "740001412241179546444",
+        "peak_states": 4916922,
+        "seconds": 51.99416,
+        "max_rss_mib": 1473.078,
+        "row_profile": "row 1: 1597 states\nrow 2: 311369 states\nrow 3: 898092 states\nrow 4: 1978868 states\nrow 5: 2264262 states\nrow 6: 2508441 states\nrow 7: 2524776 states\nrow 8: 349998 states\nrow 9: 349998 states\n"
+      },
+      "quarter": {
+        "n": 9,
+        "mode": "quarter",
+        "rotation": "0",
+        "reflection": "6067605252",
+        "peak_states": 539122,
+        "seconds": 0.790386,
+        "max_rss_mib": 185.578,
+        "row_profile": "row 1: 55 states\nrow 2: 1214 states\nrow 3: 3680 states\nrow 4: 11753 states\nrow 5: 27863 states\nrow 6: 79669 states\nrow 7: 192653 states\nrow 8: 274599 states\nrow 9: 308173 states\n"
+      }
+    },
+    "raw": "35604867201983888335090959513825934093936960",
+    "r180": "2811552194264884895872",
+    "r90": "0",
+    "axis": "740001412241179546444",
+    "both_axes": "6067605252",
+    "diagonal": "0",
+    "orbits": "4450608400247986041886906383605585167240715",
+    "classes": {
+      "trivial": "4450608400247986041885833494850899873144838",
+      "one_axis": "370000706117555970596",
+      "half_turn_only": "702888048564704322655",
+      "both_axes": "3033802626",
+      "quarter_turn": "0",
+      "all_d4": "0"
+    }
+  },
+  {
+    "n": 10,
+    "side": 20,
+    "measurements": {
+      "half": {
+        "n": 10,
+        "mode": "half",
+        "rotation": "3914442037913372967313267520",
+        "reflection": "515530816787170934773269074",
+        "peak_states": 36552854,
+        "seconds": 718.312538,
+        "max_rss_mib": 11480.953,
+        "row_profile": "row 1: 4181 states\nrow 2: 1466054 states\nrow 3: 5231263 states\nrow 4: 13143818 states\nrow 5: 15880286 states\nrow 6: 18337771 states\nrow 7: 18589532 states\nrow 8: 18752430 states\nrow 9: 2535063 states\nrow 10: 2535063 states\n"
+      },
+      "quarter": {
+        "n": 10,
+        "mode": "quarter",
+        "rotation": "31064776598948",
+        "reflection": "5594443405532",
+        "peak_states": 3997041,
+        "seconds": 10.662678,
+        "max_rss_mib": 1474.016,
+        "row_profile": "row 1: 89 states\nrow 2: 2641 states\nrow 3: 9179 states\nrow 4: 30448 states\nrow 5: 78083 states\nrow 6: 214154 states\nrow 7: 550313 states\nrow 8: 1501734 states\nrow 9: 1942419 states\nrow 10: 2125414 states\n"
+      }
+    },
+    "raw": "22194400531163887940263507134424320689889325050239815212",
+    "r180": "3914442037913372967313267520",
+    "r90": "31064776598948",
+    "axis": "515530816787170934773269074",
+    "both_axes": "5594443405532",
+    "diagonal": "0",
+    "orbits": "2774300066395485992532938392421228045172137752081602347",
+    "classes": {
+      "trivial": "2774300066395485992532938391184852127300202675283352576",
+      "one_axis": "257765408393582670164931771",
+      "half_turn_only": "978610509478334077023315760",
+      "both_axes": "2797221702766",
+      "quarter_turn": "15532388299474",
+      "all_d4": "0"
+    }
+  }
+]

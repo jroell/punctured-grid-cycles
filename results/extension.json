@@ -1,0 +1,28 @@
+[
+  {
+    "height": 18,
+    "width": 18,
+    "hole": true,
+    "count": "35604867201983888335090959513825934093936960",
+    "peak_states": 4928252,
+    "peak_row": 15,
+    "peak_col": 9,
+    "seconds": 155.631333,
+    "max_rss_mib": 1887.484,
+    "engine": "parentheses",
+    "backend": "std"
+  },
+  {
+    "height": 18,
+    "width": 18,
+    "hole": true,
+    "count": "35604867201983888335090959513825934093936960",
+    "peak_states": 4928252,
+    "peak_row": 15,
+    "peak_col": 9,
+    "seconds": 316.873897,
+    "max_rss_mib": 1695.047,
+    "engine": "partners",
+    "backend": "std"
+  }
+]
