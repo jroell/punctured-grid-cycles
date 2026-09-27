@@ -1,0 +1,42 @@
+[
+  {
+    "method": "edge-orbit search",
+    "side": 10,
+    "field": "r90",
+    "time_limit_seconds": 60,
+    "status": "pass",
+    "value": 0,
+    "nodes": 1319,
+    "seconds": 0.2861275420000311
+  },
+  {
+    "method": "edge-orbit search",
+    "side": 10,
+    "field": "both_axes",
+    "time_limit_seconds": 60,
+    "status": "pass",
+    "value": 138,
+    "nodes": 4551,
+    "seconds": 0.8457603749993723
+  },
+  {
+    "method": "edge-orbit search",
+    "side": 12,
+    "field": "r90",
+    "time_limit_seconds": 60,
+    "status": "pass",
+    "value": 8650,
+    "nodes": 44605,
+    "seconds": 14.133676082987222
+  },
+  {
+    "method": "edge-orbit search",
+    "side": 12,
+    "field": "both_axes",
+    "time_limit_seconds": 60,
+    "status": "pass",
+    "value": 6406,
+    "nodes": 203313,
+    "seconds": 55.15342316598981
+  }
+]
