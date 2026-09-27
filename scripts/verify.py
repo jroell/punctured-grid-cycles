@@ -131,9 +131,12 @@ def main():
             records.append({'method':'edge-orbit search','side':side,'field':field,'value':answer,'nodes':nodes,'seconds':seconds})
             print(f'PASS edge-orbit {side} {field}: {answer}; {nodes} nodes; {seconds:.3f}s',flush=True)
     for engine in ('parentheses','partners'):
-        for args in [('17','16','1'),('0','4','0'),('4','4','2'),('4x','4','0'),('5','5','1')]:
+        for args in [('25','16','1'),('2','25','0'),('0','4','0'),('4','4','2'),('4x','4','0'),('5','5','1')]:
             p=subprocess.run([str(ROOT/'build'/engine),*args],capture_output=True,text=True,timeout=5)
             assert p.returncode==2,(engine,args,p.returncode)
+        for args in [('2','24','0'),('24','2','0')]:
+            p=subprocess.run([str(ROOT/'build'/engine),*args],capture_output=True,text=True,timeout=5,check=True)
+            assert json.loads(p.stdout)['count']=='1',(engine,args,p.stdout)
     (ROOT/'results/verification.json').write_text(json.dumps(records,indent=2)+'\n')
     print('PASS all verification checks.',flush=True)
 

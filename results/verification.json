@@ -2,7 +2,7 @@
   {
     "method": "full DFS",
     "side": 4,
-    "seconds": 7.633300265297294e-05,
+    "seconds": 7.454199658241123e-05,
     "values": {
       "raw": 1,
       "r90": 1,
@@ -26,7 +26,7 @@
   {
     "method": "full DFS",
     "side": 6,
-    "seconds": 0.20950041701144073,
+    "seconds": 0.21410754200769588,
     "values": {
       "raw": 14,
       "r90": 0,
@@ -53,7 +53,7 @@
     "field": "r90",
     "value": 1,
     "nodes": 1,
-    "seconds": 3.137500607408583e-05
+    "seconds": 3.0625000363215804e-05
   },
   {
     "method": "edge-orbit search",
@@ -61,7 +61,7 @@
     "field": "r180",
     "value": 1,
     "nodes": 1,
-    "seconds": 2.2374995751306415e-05
+    "seconds": 2.204100019298494e-05
   },
   {
     "method": "edge-orbit search",
@@ -77,7 +77,7 @@
     "field": "both_axes",
     "value": 1,
     "nodes": 1,
-    "seconds": 1.9915998564101756e-05
+    "seconds": 2.129100903403014e-05
   },
   {
     "method": "edge-orbit search",
@@ -85,7 +85,7 @@
     "field": "r90",
     "value": 0,
     "nodes": 9,
-    "seconds": 0.0006394579977495596
+    "seconds": 0.0007392090046778321
   },
   {
     "method": "edge-orbit search",
@@ -93,7 +93,7 @@
     "field": "r180",
     "value": 2,
     "nodes": 41,
-    "seconds": 0.0028498330066213384
+    "seconds": 0.0028240419924259186
   },
   {
     "method": "edge-orbit search",
@@ -101,7 +101,7 @@
     "field": "axis",
     "value": 4,
     "nodes": 43,
-    "seconds": 0.0030255419987952337
+    "seconds": 0.0030128750076983124
   },
   {
     "method": "edge-orbit search",
@@ -109,7 +109,7 @@
     "field": "both_axes",
     "value": 2,
     "nodes": 19,
-    "seconds": 0.001134584003011696
+    "seconds": 0.001152415992692113
   },
   {
     "method": "edge-orbit search",
@@ -117,7 +117,7 @@
     "field": "r90",
     "value": 18,
     "nodes": 81,
-    "seconds": 0.010808000006363727
+    "seconds": 0.011182166999788024
   },
   {
     "method": "edge-orbit search",
@@ -125,7 +125,7 @@
     "field": "r180",
     "value": 398,
     "nodes": 2807,
-    "seconds": 0.3628553339949576
+    "seconds": 0.37804070800484624
   },
   {
     "method": "edge-orbit search",
@@ -133,7 +133,7 @@
     "field": "axis",
     "value": 436,
     "nodes": 4063,
-    "seconds": 0.5029385000088951
+    "seconds": 0.5181982500071172
   },
   {
     "method": "edge-orbit search",
@@ -141,6 +141,6 @@
     "field": "both_axes",
     "value": 20,
     "nodes": 221,
-    "seconds": 0.02545937499962747
+    "seconds": 0.025960041006328538
   }
 ]

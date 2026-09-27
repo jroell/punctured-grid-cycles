@@ -7,9 +7,9 @@
 #include <stdexcept>
 #include <string>
 #include <sys/resource.h>
-#include <unordered_map>
+#include "frontier_map.hpp"
 // Each slot is 0 (empty), 1 (opening endpoint), or 2 (closing endpoint).
-using Map = std::unordered_map<uint64_t, Count256>;
+using Map = FrontierMap<uint64_t, Count256>;
 int main(int argc, char **argv) {
   int h = 16, w = 16;
   bool hole = true;
@@ -31,11 +31,11 @@ int main(int argc, char **argv) {
     if (v != 0 && v != 1)
       throw std::invalid_argument("hole");
     hole = v;
-    if (h < 1 || h > 16 || w < 1 || w > 16 || (hole && (h % 2 || w % 2)))
+    if (h < 1 || h > 24 || w < 1 || w > 24 || (hole && (h % 2 || w % 2)))
       throw std::invalid_argument("dimensions");
   } catch (...) {
     fprintf(stderr,
-            "Usage: %s HEIGHT WIDTH HOLE; dimensions 1..16; HOLE 0 or 1; "
+            "Usage: %s HEIGHT WIDTH HOLE; dimensions 1..24; HOLE 0 or 1; "
             "punctured dimensions even\n",
             argv[0]);
     return 2;

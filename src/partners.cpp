@@ -7,7 +7,7 @@
 #include <stdexcept>
 #include <string>
 #include <sys/resource.h>
-#include <unordered_map>
+#include "frontier_map.hpp"
 // Occupied slots store their partner index plus one; zero means empty.
 using Key = unsigned __int128;
 struct Hash {
@@ -15,7 +15,7 @@ struct Hash {
     return (uint64_t)x ^ ((uint64_t)(x >> 64) * 0x9e3779b97f4a7c15ULL);
   }
 };
-using Map = std::unordered_map<Key, Count256, Hash>;
+using Map = FrontierMap<Key, Count256, Hash>;
 int main(int argc, char **argv) {
   int h = 16, w = 16;
   bool hole = true;
@@ -37,11 +37,11 @@ int main(int argc, char **argv) {
     if (v != 0 && v != 1)
       throw std::invalid_argument("hole");
     hole = v;
-    if (h < 1 || h > 16 || w < 1 || w > 16 || (hole && (h % 2 || w % 2)))
+    if (h < 1 || h > 24 || w < 1 || w > 24 || (hole && (h % 2 || w % 2)))
       throw std::invalid_argument("dimensions");
   } catch (...) {
     fprintf(stderr,
-            "Usage: %s HEIGHT WIDTH HOLE; dimensions 1..16; HOLE 0 or 1; "
+            "Usage: %s HEIGHT WIDTH HOLE; dimensions 1..24; HOLE 0 or 1; "
             "punctured dimensions even\n",
             argv[0]);
     return 2;

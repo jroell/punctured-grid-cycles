@@ -3,7 +3,7 @@
 #include <cstdio>
 #include <stdexcept>
 #include <sys/resource.h>
-#include <unordered_map>
+#include "frontier_map.hpp"
 
 using Key = unsigned __int128;
 struct Hash {
@@ -11,7 +11,7 @@ struct Hash {
     return uint64_t(x) ^ (uint64_t(x >> 64) * 0x9e3779b97f4a7c15ULL);
   }
 };
-using Map = std::unordered_map<Key, Count256, Hash>;
+using Map = FrontierMap<Key, Count256, Hash>;
 
 int main(int argc, char **argv) {
   int n;
@@ -22,7 +22,7 @@ int main(int argc, char **argv) {
     std::string s = argv[1];
     size_t used;
     n = std::stoi(s, &used);
-    if (used != s.size() || n < 2 || n > 8)
+    if (used != s.size() || n < 2 || n > 10)
       throw std::invalid_argument("n");
     s = argv[2];
     if (s != "half" && s != "quarter")
@@ -30,13 +30,13 @@ int main(int argc, char **argv) {
     quarter = s == "quarter";
   } catch (...) {
     fprintf(stderr,
-            "Usage: %s N half|quarter; 2 <= N <= 8, full board "
+            "Usage: %s N half|quarter; 2 <= N <= 10, full board "
             "side = 2N\n",
             argv[0]);
     return 2;
   }
   const int h = n, w = quarter ? n : 2 * n, slots = quarter ? 2 * w : w + 1;
-  bool board[16][16] = {};
+  bool board[20][20] = {};
   for (int i = 0; i < h; i++)
     for (int j = 0; j < w; j++)
       board[i][j] =
@@ -101,14 +101,14 @@ int main(int argc, char **argv) {
       }
       current.swap(next);
       peak = std::max(peak, current.size());
-      if (peak > 3000000) {
+      if (peak > 50000000) {
         fprintf(stderr, "State limit exceeded: %zu\n", peak);
         return 3;
       }
       if (std::chrono::duration<double>(std::chrono::steady_clock::now() -
                                         start)
-              .count() > 240) {
-        fprintf(stderr, "Time limit exceeded: 240 seconds\n");
+              .count() > 1800) {
+        fprintf(stderr, "Time limit exceeded: 1800 seconds\n");
         return 3;
       }
     }
