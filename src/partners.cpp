@@ -75,46 +75,36 @@ int main(int argc, char **argv) {
       bool down = i + 1 < h && board[i + 1][j],
            right = j + 1 < w && board[i][j + 1];
       for (const auto &kv : cur) {
-        int m[32];
-        for (int z = 0; z <= w; z++)
-          m[z] = int((kv.first >> (5 * z)) & 31) - 1;
-        int a = m[p], b = m[q];
-        auto add = [&]() { nxt[encode(m)] += kv.second; };
+        Key s = kv.first;
+        auto get = [](Key key, int slot) {
+          return int((key >> (5 * slot)) & 31) - 1;
+        };
+        auto put = [](Key key, int slot, int partner) {
+          return (key & ~(Key(31) << (5 * slot))) |
+                 (Key(partner + 1) << (5 * slot));
+        };
+        int a = get(s, p), b = get(s, q);
+        Key t = put(put(s, p, -1), q, -1);
+        auto add = [&](Key key) { nxt[key] += kv.second; };
         if (!board[i][j]) {
           if (a < 0 && b < 0)
-            add();
+            add(s);
           continue;
         }
         if (a < 0 && b < 0) {
-          if (down && right) {
-            m[p] = q;
-            m[q] = p;
-            add();
-          }
+          if (down && right)
+            add(put(put(t, p, q), q, p));
         } else if (a < 0 || b < 0) {
           int partner = a >= 0 ? a : b;
-          m[p] = m[q] = -1;
-          if (down) {
-            m[p] = partner;
-            m[partner] = p;
-            add();
-            m[p] = -1;
-          }
-          if (right) {
-            m[q] = partner;
-            m[partner] = q;
-            add();
-          }
+          if (down)
+            add(put(put(t, p, partner), partner, p));
+          if (right)
+            add(put(put(t, q, partner), partner, q));
+        } else if (a == q) {
+          if (i * w + j == last && t == 0)
+            answer += kv.second;
         } else {
-          m[p] = m[q] = -1;
-          if (a == q) {
-            if (i * w + j == last && encode(m) == 0)
-              answer += kv.second;
-          } else {
-            m[a] = b;
-            m[b] = a;
-            add();
-          }
+          add(put(put(t, a, b), b, a));
         }
       }
       cur.swap(nxt);
@@ -149,7 +139,7 @@ int main(int argc, char **argv) {
 #else
                    1024.0;
 #endif
-  printf("{\"height\":%d,\"width\":%d,\"hole\":%s,\"count\":\"%s\",\"peak_"
+  printf("{\"implementation\":\"local-partner-fields\",\"height\":%d,\"width\":%d,\"hole\":%s,\"count\":\"%s\",\"peak_"
          "states\":%zu,\"peak_row\":%d,\"peak_col\":%d,\"seconds\":%.6f,\"max_"
          "rss_mib\":%.3f}\n",
          h, w, hole ? "true" : "false", answer.str().c_str(), peak, peakrow,
