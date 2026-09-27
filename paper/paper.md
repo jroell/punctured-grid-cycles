@@ -1,241 +1,546 @@
-Hamiltonian cycles on square grids
-with a central 2 × 2 hole
+# Hamiltonian cycles on square grids with a central 2 x 2 hole
 
-Jason Roell  •  Research-note draft  •  26 September 2026
+Jason Roell
 
-## Abstract
+[PDF](../output/pdf/punctured-grid-cycles.pdf) | [Canonical LaTeX source](latex/roell-punctured-grids.tex)
 
-I enumerate undirected Hamiltonian cycles on the 2n × 2n lattice grid after deleting its four central vertices, for 1 ≤ n ≤ 8. Two frontier implementations give identical exact counts. Half-board and quarter-board reductions also count cycles fixed by square symmetries, giving geometric orbit counts and exact stabilizer classes. A separate edge-orbit search verifies the symmetry counts through the 8 × 8 case. The note includes state counts, resource measurements, and reproducible source code. Its finite-size comparisons are descriptive; they do not establish a limiting growth constant or a new critical exponent.
+# Definition and exact sequence
 
-## 1. Definition and exact sequence
+Let $`G_n`$ have vertices $`(x,y)`$ with $`1\leq x,y\leq2n`$, except for
+$`(n,n)`$, $`(n,n+1)`$, $`(n+1,n)`$, and $`(n+1,n+1)`$. Edges join
+lattice neighbors. For $`n\geq2`$, the graph has $`4n^2-4`$ vertices and
+$`8n^2-4n-12`$ edges. Let $`H_n`$ count its Hamiltonian cycles as
+undirected edge sets, with neither a starting vertex nor a direction
+distinguished. Rotated and reflected edge sets are initially distinct.
+Set $`H_1=0`$, since $`G_1`$ is empty. The first nonempty case $`G_2`$
+is a single $`12`$-cycle.
 
-Let Gₙ have vertices (x, y) with 1 ≤ x, y ≤ 2n, except for (n, n), (n, n+1), (n+1, n), and (n+1, n+1). Edges join lattice neighbors. For n ≥ 2 it has 4n² − 4 vertices and 8n² − 4n − 12 edges. Let Hₙ count connected spanning subgraphs in which every vertex has degree two. Cycles are edge sets: no starting vertex or direction is distinguished. Rotated and reflected edge sets are initially distinct. Set H₁ = 0 because G₁ is empty.
+| $`n`$ | $`|V(G_n)|`$ | $`H_n`$ |
+|---:|---:|---:|
+| 1 | 0 | 0 |
+| 2 | 12 | 1 |
+| 3 | 32 | 14 |
+| 4 | 60 | 164102 |
+| 5 | 96 | 9684216390 |
+| 6 | 140 | 27867828294632440 |
+| 7 | 192 | 1167509412814480584454378 |
+| 8 | 252 | 1517021583328338160591145724550850 |
+| 9 | 320 | 35604867201983888335090959513825934093936960 |
+| 10 | 396 | 22194400531163887940263507134424320689889325050239815212 |
 
-| n | Grid | Hₙ |
-| --- | --- | --- |
-| 1 | 2 × 2 | 0 |
-| 2 | 4 × 4 | 1 |
-| 3 | 6 × 6 | 14 |
-| 4 | 8 × 8 | 164102 |
-| 5 | 10 × 10 | 9684216390 |
-| 6 | 12 × 12 | 27867828294632440 |
-| 7 | 14 × 14 | 1167509412814480584454378 |
-| 8 | 16 × 16 | 1517021583328338160591145724550850 |
+Undirected Hamiltonian cycles on the centrally punctured grid.
+<a id="tab:raw"></a>
 
-The 4 × 4 punctured graph is a single 12-cycle. At the largest size the raw count is 1,517,021,583,328,338,160,591,145,724,550,850, while the count modulo all eight symmetries of the square is 189,627,697,916,042,276,889,063,633,686,282.
+The computation gives the complete table through $`n=10`$ shown in
+Table <a href="#tab:raw" data-reference-type="ref"
+data-reference="tab:raw">1</a>. In particular,
+``` math
+H_8=1517021583328338160591145724550850.
+```
+The number $`O_n`$ of geometric orbits under the eight symmetries of the
+square is calculated in
+Section <a href="#sec:burnside" data-reference-type="ref"
+data-reference="sec:burnside">5</a>. The code and data are at
 
-The enumeration method is an adaptation of established connectivity transfer methods, not a claim of a new general algorithm. Related work and the present verification boundary are discussed in Section 8.
+<div class="center">
 
+<https://github.com/jroell/punctured-grid-cycles>.
 
-<!-- page -->
+</div>
 
-# 2. Frontier recurrence and correctness
+The counting programs and complete data are fixed at commit
+[`2d0d15b`](https://github.com/jroell/punctured-grid-cycles/tree/2d0d15baa21d21f9436bcf5736be4969a0ad818f).
+The revised manuscript and its build instructions are in the same
+repository.
 
-Process lattice positions in row-major order. A frontier separates processed positions from unprocessed positions and has at most w+1 slots for a board of width w. A slot is empty or carries a selected edge to the unprocessed side. Every processed vertex has its required degree, and every connected component built so far is a path. The state records which occupied slots are the two ends of each such path.
+Connectivity transfer methods are established techniques for Hamiltonian
+grid enumeration. The present calculation adapts them to this central
+puncture. The relation to earlier work is discussed in
+Section <a href="#sec:reproducibility" data-reference-type="ref"
+data-reference="sec:reproducibility">8</a>.
 
-In the primary implementation, planarity makes the endpoint pairing noncrossing. Encode empty slots by 0 and the two ends of each pair by opening and closing parentheses, represented by 1 and 2. A word of w+1 slots uses 2(w+1) bits. The checker stores each partner index explicitly; it does not use parenthesis matching. Both implementations aggregate equal frontier states in hash maps.
+# Frontier recurrence and correctness
 
-Empty slots and noncrossing endpoint pairs form Motzkin words. Consequently, w+1 slots admit at most M(w+1) possible words, where M is the Motzkin sequence. At width 16 this bound is M(17) = 2,356,779. Only reachable states are created. A local update has at most two choices; matching a parenthesis can scan O(w) slots.
+Process lattice positions in row-major order. A frontier separates
+processed positions from unprocessed positions and has at most $`w+1`$
+slots for a board of width $`w`$. Each slot is empty or carries a
+selected edge to the unprocessed side. Every processed vertex has its
+required degree, and every component built so far is a path. The state
+records which occupied slots are the two ends of each path.
+
+In the primary implementation, planarity makes the endpoint pairing
+noncrossing. Empty slots are encoded by $`0`$, and the two ends of each
+pair by opening and closing parentheses, represented by $`1`$ and $`2`$.
+A word uses $`2(w+1)`$ bits. The checker stores each partner index
+explicitly, without parenthesis matching. Both implementations aggregate
+equal states in hash maps. Empty slots and noncrossing pairs form
+Motzkin words, giving an upper bound of $`M_{w+1}`$ possible states. At
+width $`16`$ this bound is $`M_{17}=2356779`$; at width $`20`$ it is
+$`M_{21}=142547559`$. Only reachable states are created.
 
 ## Local transitions
 
-| Incoming selected edges | Required action |
-| --- | --- |
-| 0 | Choose both outgoing edges, right and down, if both neighbors exist. Create a new paired path. |
-| 1 | Choose exactly one available outgoing edge and move the incoming path endpoint to it. |
-| 2, different paths | Choose no outgoing edge. Join the two paths and pair their other endpoints. |
-| 2, same path | Accept only at the last remaining vertex, with no other occupied frontier slots. |
-| Deleted position | Permit no selected incident edges. Pass the state through only when both local slots are empty. |
-
-If Dₜ(s) is the number of partial edge sets producing state s after t positions, then Dₜ₊₁(s′) is the sum of Dₜ(s) over legal local choices leading from s to s′. Initialize the empty state with weight one. At each row boundary, shift the contour slots; at the final vertex, accumulate only the legal single-cycle closure.
-
-## Correctness argument
-
-Induct on the processing order. Every legal transition preserves degree two at a newly processed vertex and preserves the path interpretation of the frontier. Joining two ends of the same path is the only way to create a closed component; rejecting that transition before the final closure excludes every disconnected 2-factor. Conversely, restricting any Hamiltonian cycle to successive processed regions produces exactly these legal states and choices. Each lattice edge is decided once, at its earlier endpoint, so an accepted edge set has exactly one construction history. No division by the cycle length or by two is required.
-
-Counters are checked unsigned 256-bit integers, implemented as four 64-bit limbs. Addition aborts on overflow instead of wrapping. No overflow occurred in any recorded run. The implementations accept dimensions up to 16, so their state encodings remain within the supported bit widths.
-
-
-<!-- page -->
-
-# 3. The hole, pruning, and measured state space
-
-A removed vertex contributes only an empty local transition. Edges pointing into the hole are disabled before they can be selected. The geometric scan still crosses the entire rectangular board. Empty slots at the hole do not split the state into independent left and right problems: paths on opposite sides can already be connected through the processed region, and their endpoint pairing must be retained globally.
-
-The hole creates an inner face, but it does not invalidate noncrossing pairings on the outer scan contour. Disjoint planar paths with endpoints on that contour cannot realize an interlacing pairing. No extra winding label is needed for the raw count; the state already retains exactly the connectivity that can affect a continuation.
-
-Figure 1. Deleted vertices (crosses) and the row-end state profile for side 16. Shading marks the rows containing deleted vertices. The reduction starts one row earlier because edges into the hole are disabled. The chart is sampled at row ends; the peak over every vertex transition is larger.
-
-![Figure 1. Deleted vertices (crosses) and the row-end state profile for side 16. Shading marks the rows containing deleted vertices. The reduction starts one row earlier because edges into the hole are disabled. The chart is sampled at row ends; the peak over every vertex transition is larger.](figures/hole-and-states.png)
-
-| Grid | Peak states | Time (s) | Peak RSS (MiB) |
-| --- | --- | --- | --- |
-| 4 × 4 | 1 | 0.000010 | 1.719 |
-| 6 × 6 | 40 | 0.000040 | 1.750 |
-| 8 × 8 | 339 | 0.000233 | 1.891 |
-| 10 × 10 | 2,120 | 0.002916 | 2.578 |
-| 12 × 12 | 13,943 | 0.035642 | 5.422 |
-| 14 × 14 | 95,660 | 0.476549 | 24.375 |
-| 16 × 16 | 677,909 | 11.006828 | 315.797 |
-
-For the 16 × 16 punctured board, the peak of 677,909 distinct active states first occurs after row 13, column 13. At row ends, the maximum is 349,998 states. The two hash maps coexist during a transition; the reported process RSS includes both maps, buckets, and allocator overhead.
-
-Pruning consists of degree constraints, missing-neighbor constraints, and rejection of premature cycles. The raw counter does not identify reflection-related or rotation-related states, and it does not perform future-reachability pruning. Measurements are single runs on an Apple M4 Max with 128 GiB RAM, using Apple clang 21.0.0 and -O3 -std=c++17. They are not repeated or isolated performance benchmarks.
-
-
-<!-- page -->
-
-# 4. Counting fixed cycles on smaller boards
-
-Write R₂ for the number of full-board cycles fixed by 180° rotation, R₄ for the number fixed by 90° rotation, F for those fixed by one specified horizontal or vertical reflection, and B for those fixed by both of those reflections. The symmetry counter uses explicit endpoint partners and allows temporary boundary stubs. It never closes a path inside the smaller board.
-
-## Half board: F and R₂
-
-Take rows 1 through n, with the two central vertices removed from the last row. A reflection-fixed spanning cycle must cross the reflection axis. Each crossing edge is fixed setwise, and a nonidentity reflection of a cycle can fix only two edges when it fixes no vertices. Thus there are exactly two crossings. The retained half is a single Hamiltonian path whose two endpoints lie at allowed positions on the cut. Counting final states with exactly two paired stubs gives F.
-
-For a half-turn, identify every omitted vertex with its rotated representative. On the cut, pair column x with column 2n+1−x. Selected seam edges complete the half-board paths into a quotient cycle. Require one quotient component and an odd number of seam edges. Each seam changes the copy index by one modulo two; odd parity makes the lift one full-board cycle rather than two cycles. This gives R₂ without enumerating full-board cycles.
-
-## Quarter board: R₄ and B
-
-For a quarter-turn, use the n × n quadrant with corner (n, n) deleted. Add seam edges joining (n, k) to (k, n), for 1 ≤ k < n. A connected quotient cycle lifts to a connected cycle on four copies precisely when its net change of copy index is coprime to four. Each seam contributes +1 or −1, so this condition is equivalent to an odd number of seam edges. Final states are tested for this parity and for a single quotient component.
-
-Figure 2. Quarter-board quotient for the 8 × 8 case. Dashed curves are the additional seam edges, not original grid edges. The deleted corner removes the central obstruction.
-
-![Figure 2. Quarter-board quotient for the 8 × 8 case. Dashed curves are the additional seam edges, not original grid edges. The deleted corner removes the central obstruction.](figures/quarter-quotient.png)
-
-If a full cycle is fixed by both axial reflections, it crosses each axis exactly twice. Cutting at those four edges leaves one spanning path in each quadrant. Its endpoints lie respectively on the two inner sides. Counting quarter-board states with exactly two paired stubs, one on each inner side, gives B. Reflection reconstructs the full cycle uniquely.
-
-
-<!-- page -->
-
-# 5. Burnside count and parity restrictions
-
-For n ≥ 3, a diagonal reflection fixes 2n−2 remaining vertices of Gₙ. Its restriction to a Hamiltonian cycle would be a nonidentity cycle automorphism fixing at least four vertices, which is impossible. Thus neither diagonal reflection fixes a cycle. The n=2 graph is the single 12-cycle and is fixed by every square symmetry.
-
-A quarter-turn exchanges the two checkerboard colors of an even-sided grid. On a Hamiltonian cycle of length 4n²−4, an order-four rotation acts by a shift of n²−1 or 3(n²−1) vertices. When n is odd these shifts are even, so they preserve checkerboard color. This contradiction proves R₄ = 0 for odd n. The deleted central block reverses the familiar parity obstruction for intact square grids [2].
-
-Let Oₙ count edge sets modulo the dihedral group D₄. Burnside's lemma gives, for n ≥ 3:
-
-Oₙ = (Hₙ + R₂ + 2R₄ + 2F) / 8.
-
-The identity contributes Hₙ; the half-turn contributes R₂; the two quarter-turns have the same fixed set; and the two axial reflections are conjugate. For n=2, add the two diagonal-reflection contributions of one before dividing by eight.
-
-| n | R₂: 180° rotation | F: one axial reflection |
-| --- | --- | --- |
-| 2 | 1 | 1 |
-| 3 | 2 | 4 |
-| 4 | 398 | 436 |
-| 5 | 39598 | 58198 |
-| 6 | 155368312 | 96650662 |
-| 7 | 480564699890 | 308860488706 |
-| 8 | 34116385160498522 | 10202488985967222 |
-
-| n | R₄: 90° rotation | B: both axes | Oₙ: geometric orbits |
-| --- | --- | --- | --- |
-| 2 | 1 | 1 | 1 |
-| 3 | 0 | 2 | 3 |
-| 4 | 18 | 20 | 20676 |
-| 5 | 0 | 138 | 1210546548 |
-| 6 | 8650 | 6406 | 3483478580414922 |
-| 7 | 0 | 201338 | 145938676601947358766460 |
-| 8 | 106253220 | 41184930 | 189627697916042276889063633686282 |
-
-In particular, O₈ = 189,627,697,916,042,276,889,063,633,686,282. These are geometric equivalence classes under the symmetries of the embedded square, not classes under arbitrary abstract graph isomorphism.
-
-For every size, the Burnside numerator is divisible by eight. That is a consistency check, not an independent proof of the fixed-cycle counts. The separate edge-orbit enumeration in Section 8 supplies a different check.
-
-
-<!-- page -->
-
-# 6. Exact stabilizer classes
-
-Burnside gives the total number of orbits. The same fixed-set counts determine how many orbits have each exact symmetry group. For n ≥ 3, diagonal reflections are absent. A cycle cannot simultaneously have quarter-turn and axial-reflection symmetry, since those symmetries would generate a diagonal reflection. The remaining possibilities are the five rows below.
-
-| Exact stabilizer | Orbit size | Number of orbits |
-| --- | --- | --- |
-| Identity only | 8 | (Hₙ − R₂ − 2F + 2B) / 8 |
-| One axial reflection | 4 | (F − B) / 2 |
-| 180° rotation only | 4 | (R₂ − R₄ − B) / 4 |
-| Both axial reflections and 180° | 2 | B / 2 |
-| 90° rotations, no reflection | 2 | R₄ / 2 |
-
-To derive the formulas, first observe that B and R₄ count disjoint sets of edge sets with order-four stabilizers. Each such orbit has two members. After subtracting them from R₂, the remaining half-turn-fixed edge sets come in orbits of size four. Each one-reflection orbit contributes two members fixed by the specified axis, which explains the factor two in (F−B)/2. Subtracting all nontrivial stabilizers from Hₙ gives the first row.
-
-## The 16 × 16 punctured board
-
-| Exact symmetry | Number of geometric orbits |
-| --- | --- |
-| Identity only | 189627697916042263258722834310968 |
-| One axial reflection | 5101244472391146 |
-| 180° rotation only | 8529096253265093 |
-| Both axes and 180° rotation | 20592465 |
-| 90° rotations, no reflection | 53126610 |
-| All square symmetries | 0 |
-| Total | 189627697916042276889063633686282 |
-
-The class counts are all nonnegative integers. Their sum equals O₈. Weighting them by orbit sizes 8, 4, 4, 2, and 2 recovers H₈ exactly. The same checks pass for every computed size. For n=2, there is instead one orbit with full D₄ stabilizer and orbit size one.
-
-This class decomposition follows the same group-action bookkeeping used for intact grids by Wynn [2]. The half-board and quarter-board domains differ here because the central vertices are absent. The explicit quotient connectivity and seam-parity tests prevent counting a symmetric union of several cycles as one Hamiltonian cycle.
-
-
-<!-- page -->
-
-# 7. Finite-size comparison with intact grids
-
-Let Cₙ count undirected Hamiltonian cycles on the intact 2n × 2n grid, as in OEIS A003763 [1]. Both implementations reproduce all eight available comparison values used here. Define the same-footprint ratio Qₙ = Hₙ/Cₙ. This ratio is not a probability of surviving vertex deletion: deleting vertices from an intact Hamiltonian cycle generally does not leave a Hamiltonian cycle.
-
-For a comparison normalized by the number of visited vertices, define cₙ = Cₙ^(1/(4n²)) and hₙ = Hₙ^(1/(4n²−4)). These are finite-size exponential-growth estimators, not measurements of a limiting connective constant. Both the change in vertex count and boundary corrections must be accounted for before interpreting their difference.
-
-| n | Qₙ = Hₙ / Cₙ | cₙ: intact | hₙ: punctured |
-| --- | --- | --- | --- |
-| 3 | 0.013059701 | 1.213869718 | 1.085966682 |
-| 4 | 0.035377668 | 1.271048904 | 1.221570580 |
-| 5 | 0.020725521 | 1.308264601 | 1.270637022 |
-| 6 | 0.025894009 | 1.334201899 | 1.310584485 |
-| 7 | 0.020801394 | 1.353235262 | 1.334597523 |
-| 8 | 0.023026163 | 1.367762905 | 1.354161936 |
-
-Figure 3. Exact-count ratios and per-vertex growth estimators. The lines only connect measured values. No extrapolation or fitted asymptotic curve is shown.
-
-![Figure 3. Exact-count ratios and per-vertex growth estimators. The lines only connect measured values. No extrapolation or fitted asymptotic curve is shown.](figures/finite-size.png)
-
-The ratios for n=3 through 8 are nonmonotone and show a separation between the even-n and odd-n subsequences. At n=8 the punctured count is about 2.3026% of the intact count for the same outer board. These observations support reporting parity-separated data, but seven nonempty sizes do not identify an asymptotic exponent or distinguish a constant prefactor from a slowly changing correction.
-
-A possible future scaling model separates area, boundary, and logarithmic terms, for example log Cₙ = a(4n²) + b(2n) + c log(2n) + d + lower-order terms. An analogous model for Hₙ would use 4n²−4 visited vertices and could include parity-dependent corrections. This is a model to test, not a theorem asserted here. In particular, this note neither proves that the bulk coefficient a is unchanged by the hole nor estimates a change in it.
-
-
-<!-- page -->
-
-# 8. Reproducibility, related work, and limits
-
-## Verification and build
-
-The package contains a parenthesis frontier counter, a direct-partner frontier counter, a symmetry counter, and a Python checker that branches on complete edge orbits. Full path enumeration checks the 4 × 4 and 6 × 6 punctured boards, including all eight symmetry actions. Edge-orbit constraint search independently checks R₂, R₄, F, and B through side 8. The two full counters agree for intact and punctured boards at every even side from 2 through 16.
-
-From the repository root, run:
-
-make all
-make benchmark
-make test
-uv sync --group paper
-uv run --group paper python scripts/build_paper.py
-
-The first three commands need a C++17 compiler with unsigned __int128 support and Python 3.11 or later. The paper uses pinned dependencies in uv.lock. Each full-board benchmark has a 300-second limit; the symmetry counter stops after 240 seconds or three million active states; each small edge-orbit check has a 60-second limit. All commands run a finite list of cases. Machine-readable counts are decimal strings, so JSON readers cannot silently round them as floating-point values.
-
-results/benchmark.json records timing, peak state count, peak location, and process RSS for both implementations. results/symmetry.json records fixed sets and stabilizer classes. results/verification.json records the separate small-case checks. The committed tables and source checksums support exact-count reproduction; timings and memory use may differ by platform.
-
-## Prior work and novelty boundary
-
-Connectivity transfer methods and symmetry reduction for Hamiltonian grids are established. Wynn [2] counts symmetry classes for intact square grids and uses quadrant quotients for quarter-turn symmetry. Jacobsen [3] enumerates circuits, walks, and chains by transfer methods. Blanco and Zeilberger [4] give a recent fixed-width generating-function implementation. This note applies those ideas to a precisely specified central puncture and records a complete reproducible table through side 16.
-
-An OEIS search for the consecutive terms 14, 164102, 9684216390 returned no result on 26 September 2026. That is a limited search, not evidence that the sequence has never appeared. The literature check is likewise not exhaustive. This document is a local research draft, not a submitted or accepted paper. The contribution and venue fit still require editorial judgment. No claim of publication priority is made.
-
-## References
-
-[1] OEIS Foundation Inc. A003763, Number of (undirected) Hamiltonian cycles on a 2n × 2n square grid of points. https://oeis.org/A003763 (accessed 26 September 2026).
-
-[2] Ed Wynn. Enumeration of nonisomorphic Hamiltonian cycles on square grid graphs. arXiv:1402.0545, 2014. https://arxiv.org/abs/1402.0545
-
-[3] Jesper Lykke Jacobsen. Exact enumeration of Hamiltonian circuits, walks, and chains in two and three dimensions. Journal of Physics A 40 (2007), 14667-14678. https://arxiv.org/abs/0709.2322
-
-[4] Pablo Blanco and Doron Zeilberger. Counting (and Randomly Generating) Hamiltonian Cycles in Rectangular Grids. arXiv:2603.24315, 2026. https://arxiv.org/abs/2603.24315
+At a remaining vertex, the numbers of selected incoming and outgoing
+edges sum to two. There are five cases.
+
+1.  With no incoming edge, select both outgoing edges, right and down,
+    if both neighbors exist, and create a paired path.
+
+2.  With one incoming edge, select one available outgoing edge and move
+    the incoming path endpoint to it.
+
+3.  With two incoming edges from different paths, select no outgoing
+    edge, join the paths, and pair their other endpoints.
+
+4.  With two incoming edges from the same path, accept only at the last
+    remaining vertex, with no other occupied frontier slots.
+
+5.  At a deleted position, permit no selected incident edges. Pass the
+    state through only when both local slots are empty.
+
+If $`D_t(s)`$ counts partial edge sets producing state $`s`$ after $`t`$
+positions, then
+``` math
+D_{t+1}(s')=\sum_{s}\sum_{\substack{\text{legal local choices}\\s\longrightarrow s'}}D_t(s).
+```
+Initialize the empty state with weight one. At row boundaries, shift the
+contour slots. At the final vertex, accumulate only a legal single-cycle
+closure. Each local update has at most two choices; locating a matching
+parenthesis can scan $`O(w)`$ slots.
+
+## Correctness
+
+Induct on the processing order. Every legal transition gives the newly
+processed vertex degree two and preserves the path interpretation of the
+frontier. Joining two ends of the same path is the only way to create a
+closed component. Rejecting that transition before the final closure
+therefore excludes every disconnected $`2`$-factor. Conversely,
+restricting a Hamiltonian cycle to successive processed regions produces
+exactly these legal states and choices. Every edge is decided once, at
+its earlier endpoint. Thus every accepted edge set has one construction
+history, and no division by the cycle length or by two is required.
+
+The implementations use checked unsigned $`256`$-bit counters,
+represented by four $`64`$-bit limbs. Addition aborts on overflow
+instead of wrapping. No overflow occurred in the recorded runs. Accepted
+dimensions are at most $`24`$, keeping both state encodings within their
+supported widths. The verified main tables in this note cover
+$`n\leq10`$.
+
+# Hole handling, pruning, and state counts
+
+A removed vertex contributes only an empty local transition. Edges
+pointing into the hole are disabled before selection. The scan still
+crosses the entire rectangular board. Empty slots at the hole do not
+split the state into independent left and right problems: paths on
+opposite sides may already be connected through the processed region.
+Their pairing is retained globally.
+
+The hole creates an inner face, but does not invalidate noncrossing
+pairings on the outer scan contour. Disjoint planar paths with endpoints
+on that contour cannot realize an interlacing pairing. No winding label
+is needed for the raw count, because the pairing retains the
+connectivity relevant to subsequent extensions.
+
+<figure id="fig:states" data-latex-placement="htbp">
+<img src="figures/hole-and-states.png" alt="Manuscript figure" />
+<figcaption>Deleted vertices in the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>8</mn><mo>×</mo><mn>8</mn></mrow><annotation encoding="application/x-tex">8\times8</annotation></semantics></math>
+example, and row-end state counts at side
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>16</mn><annotation encoding="application/x-tex">16</annotation></semantics></math>.
+Shading marks the rows with deleted vertices. The reduction starts one
+row earlier because edges into the hole are disabled. The maximum over
+all vertex transitions exceeds the row-end maximum.</figcaption>
+</figure>
+
+| $`2n`$ |  Hole peak | Intact peak |    Seconds | RSS (MiB) |
+|-------:|-----------:|------------:|-----------:|----------:|
+|      4 |          1 |          11 |   0.000010 |     1.719 |
+|      6 |         40 |          59 |   0.000040 |     1.750 |
+|      8 |        339 |         341 |   0.000233 |     1.891 |
+|     10 |      2,120 |       2,120 |   0.002916 |     2.578 |
+|     12 |     13,943 |      13,943 |   0.035642 |     5.422 |
+|     14 |     95,660 |      95,660 |   0.476549 |    24.375 |
+|     16 |    677,909 |     677,909 |  11.006828 |   315.797 |
+|     18 |  4,928,252 |   4,928,252 |  19.928776 |  1233.266 |
+|     20 | 36,572,939 |  36,572,939 | 205.434662 |  9856.422 |
+
+Primary-counter peak states for punctured and intact boards. Time and
+memory refer to punctured boards. Sides through $`16`$ use standard hash
+maps; larger sides use Boost flat maps, so timings are not directly
+comparable. <a id="tab:metrics"></a>
+
+At side $`16`$, the peak of 677,909 active states first occurs after row
+$`13`$, column $`13`$. The row-end maximum is $`349998`$. The two hash
+maps coexist during a transition; process RSS includes both maps, their
+buckets, and allocator overhead. The recorded run took 11.01 seconds and
+used 315.8 MiB peak RSS. Measurements are single observations on an
+Apple M4 Max with $`128`$ GiB RAM, using Apple clang 21.0.0 with
+`-O3 -std=c++17`. They are not repeated, isolated performance
+benchmarks. The larger runs use Boost 1.92.0 flat hash maps for
+aggregation. The explicit-partner counter also supports local updates to
+partner fields rather than decoding and re-encoding the whole frontier
+at every vertex. These changes preserve the state definition and
+recurrence. All $`46`$ established raw and symmetry runs were rechecked
+with the flat-map backend, including peak states. The punctured
+side-$`18`$ count was also checked with both original standard-map
+implementations. Some extension and validation runs overlapped on the
+workstation; their timings are not isolated comparisons.
+
+Pruning uses degree constraints, missing-neighbor constraints, and
+rejection of premature cycles. The raw counter does not identify states
+under rotations or reflections, and does not perform future-reachability
+pruning. Symmetries are counted separately by the reductions below.
+
+# Fixed cycles on smaller boards
+
+Write $`R_2`$ for the number of full-board cycles fixed by $`180^\circ`$
+rotation, $`R_4`$ for those fixed by $`90^\circ`$ rotation, $`F`$ for
+those fixed by one specified axial reflection, and $`B`$ for those fixed
+by both axial reflections. These counts depend on $`n`$, suppressed in
+the notation. The symmetry counter uses explicit endpoint partners and
+temporary boundary stubs, and never closes a path inside the smaller
+board.
+
+## Half board: $`F`$ and $`R_2`$
+
+Take rows $`1`$ through $`n`$, with the two central vertices deleted
+from the last row. A reflection-fixed spanning cycle must cross the
+reflection axis. Every crossing edge is fixed setwise. The induced
+order-two cycle automorphism is either a reflection or a half-shift. A
+half-shift fixes no edge setwise, so the crossing rules it out. Thus the
+automorphism is a reflection with no fixed vertices and exactly two
+fixed edges. These are exactly the two crossings. The retained half is a
+Hamiltonian path with both endpoints at allowed positions on the cut.
+Counting final states with exactly two paired stubs gives $`F`$.
+
+The half-turn has its center at a lattice face center and fixes no
+vertex or edge setwise. It therefore acts freely on vertices and edges
+of the cycle. Identify omitted vertices with their rotated
+representatives. On the cut, pair column $`x`$ with column $`2n+1-x`$.
+Selected seam edges complete the half-board paths into a quotient cycle.
+Require one quotient component and an odd number of seam edges. Each
+seam changes the copy index by one modulo two, so odd parity makes the
+lift one cycle instead of two. This gives $`R_2`$ without constructing
+full-board cycles.
+
+## Quarter board: $`R_4`$ and $`B`$
+
+For a quarter-turn, use the $`n\times n`$ quadrant with corner $`(n,n)`$
+deleted. Add seam edges joining $`(n,k)`$ to $`(k,n)`$, for
+$`1\leq k<n`$. A connected quotient cycle lifts to one cycle on four
+copies precisely when its net change of copy index is coprime to four.
+Each seam contributes $`+1`$ or $`-1`$. Thus the condition is equivalent
+to an odd number of seam edges. Final states are tested for this parity
+and a single quotient component. This is the punctured analogue of the
+quadrant construction used by Wynn  for intact grids.
+
+<figure id="fig:quarter" data-latex-placement="htbp">
+<img src="figures/quarter-quotient.png" alt="Manuscript figure" />
+<figcaption>Quarter-board quotient for side
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>8</mn><annotation encoding="application/x-tex">8</annotation></semantics></math>.
+Dashed curves are additional seam edges, not original grid edges. The
+corner
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>4</mn><mo>,</mo><mn>4</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(4,4)</annotation></semantics></math>
+is deleted.</figcaption>
+</figure>
+
+If a full cycle is fixed by both axial reflections, it crosses each axis
+exactly twice. Cutting at those four edges leaves one spanning path in
+each quadrant. Its endpoints lie on the two inner sides. Counting
+quarter-board states with exactly two paired stubs, one on each inner
+side, gives $`B`$. Reflection reconstructs the full cycle uniquely.
+
+# Parity, diagonal reflections, and Burnside’s lemma
+
+<div id="prop:parity" class="proposition">
+
+**Proposition 1**. *If $`n\geq3`$ is odd, then $`G_n`$ has no
+Hamiltonian cycle fixed by a quarter-turn. Equivalently, $`R_4=0`$ for
+odd $`n`$.*
+
+</div>
+
+<div class="proof">
+
+*Proof.* Color $`(x,y)`$ by the parity of $`x+y`$. A quarter-turn sends
+it to $`(2n+1-y,x)`$ and exchanges the colors. Suppose a Hamiltonian
+cycle $`C`$ is fixed by this rotation. Its length is $`N=4n^2-4`$. The
+induced automorphism of $`C`$ has order four, since $`C`$ spans the
+graph and the quarter-turn acts faithfully on its vertices. Every
+order-four automorphism of an undirected cycle is a cyclic shift by
+$`N/4`$ or $`3N/4`$ positions. These are $`n^2-1`$ and $`3(n^2-1)`$
+positions. If $`n`$ is odd, both shifts are even. Since colors alternate
+around $`C`$, such a shift preserves color, contradicting the color
+exchange of the quarter-turn. ◻
+
+</div>
+
+The empty case $`n=1`$ also has $`R_4=0`$ by convention. The deletion
+reverses the corresponding parity obstruction for intact grids .
+
+<div class="samepage">
+
+<div id="prop:diagonal" class="proposition">
+
+**Proposition 2**. *For $`n\geq3`$, neither diagonal reflection fixes a
+Hamiltonian cycle of $`G_n`$.*
+
+</div>
+
+<div class="proof">
+
+*Proof.* Each diagonal reflection fixes $`2n-2\geq4`$ remaining
+vertices. If it preserved a Hamiltonian cycle, its restriction would be
+a nonidentity cycle automorphism with at least four fixed vertices. A
+nonidentity cycle automorphism fixes at most two vertices, a
+contradiction. ◻
+
+</div>
+
+</div>
+
+Let $`O_n`$ count geometric orbits of Hamiltonian-cycle edge sets under
+$`D_4`$. For $`n\geq3`$,
+Proposition <a href="#prop:diagonal" data-reference-type="ref"
+data-reference="prop:diagonal">2</a> and Burnside’s lemma give
+``` math
+\begin{equation}
+\label{eq:burnside}
+O_n=\frac{H_n+R_2+2R_4+2F}{8}.
+\end{equation}
+```
+The two quarter-turns have the same fixed set, and the two axial
+reflections are conjugate. For $`n=2`$, add the two diagonal-reflection
+contributions of one before dividing by eight; the unique $`12`$-cycle
+is fixed by all of $`D_4`$. Set $`O_1=0`$.
+
+| $`n`$ | $`R_2`$ | $`R_4`$ | $`F`$ | $`B`$ |
+|---:|---:|---:|---:|---:|
+| 2 | 1 | 1 | 1 | 1 |
+| 3 | 2 | 0 | 4 | 2 |
+| 4 | 398 | 18 | 436 | 20 |
+| 5 | 39598 | 0 | 58198 | 138 |
+| 6 | 155368312 | 8650 | 96650662 | 6406 |
+| 7 | 480564699890 | 0 | 308860488706 | 201338 |
+| 8 | 34116385160498522 | 106253220 | 10202488985967222 | 41184930 |
+| 9 | 2811552194264884895872 | 0 | 740001412241179546444 | 6067605252 |
+| 10 | 3914442037913372967313267520 | 31064776598948 | 515530816787170934773269074 | 5594443405532 |
+
+Fixed edge-set counts for the punctured grids. $`F`$ refers to one
+specified axial reflection; $`B`$ requires both. <a id="tab:fixed"></a>
+
+| $`n`$ |                                                 $`O_n`$ |
+|------:|--------------------------------------------------------:|
+|     1 |                                                       0 |
+|     2 |                                                       1 |
+|     3 |                                                       3 |
+|     4 |                                                   20676 |
+|     5 |                                              1210546548 |
+|     6 |                                        3483478580414922 |
+|     7 |                                145938676601947358766460 |
+|     8 |                       189627697916042276889063633686282 |
+|     9 |             4450608400247986041886906383605585167240715 |
+|    10 | 2774300066395485992532938392421228045172137752081602347 |
+
+Geometric orbits under all eight symmetries of the square. <a id="tab:orbits"></a>
+
+In particular,
+``` math
+O_8=189627697916042276889063633686282.
+```
+These are geometric equivalence classes, not classes under arbitrary
+abstract graph isomorphism. Every computed Burnside numerator is
+divisible by eight. This is a consistency check; the separate small-case
+edge-orbit search provides a different enumeration check.
+
+# Exact stabilizer classes
+
+For $`n\geq3`$, a cycle cannot have both quarter-turn and
+axial-reflection symmetry, since these would generate a forbidden
+diagonal reflection. The five possible exact stabilizers have the orbit
+counts in Table <a href="#tab:classformulas" data-reference-type="ref"
+data-reference="tab:classformulas">5</a>.
+
+| Exact stabilizer        | Orbit size |      Number of orbits |
+|:------------------------|:----------:|----------------------:|
+| Identity only           |     8      | $`(H_n-R_2-2F+2B)/8`$ |
+| One axial reflection    |     4      |           $`(F-B)/2`$ |
+| Half-turn only          |     4      |     $`(R_2-R_4-B)/4`$ |
+| Both axes and half-turn |     2      |               $`B/2`$ |
+| Quarter-turn rotations  |     2      |             $`R_4/2`$ |
+
+Exact stabilizer decomposition for $`n\geq3`$. <a id="tab:classformulas"></a>
+
+To derive these formulas, first note that $`B`$ and $`R_4`$ count
+disjoint sets with order-four stabilizers, each with two members per
+orbit. Subtracting these sets from $`R_2`$ leaves the half-turn-only
+edge sets in orbits of size four. Each one-reflection orbit has two
+members fixed by the specified axis, which gives $`(F-B)/2`$.
+Subtracting all nontrivial stabilizers from $`H_n`$ gives the
+identity-only count. This bookkeeping follows the corresponding
+intact-grid analysis of Wynn .
+
+| Exact stabilizer            |                  Number of orbits |
+|:----------------------------|----------------------------------:|
+| Identity only               | 189627697916042263258722834310968 |
+| One axial reflection        |                  5101244472391146 |
+| $`180^\circ`$ rotation only |                  8529096253265093 |
+| Both axial reflections      |                          20592465 |
+| Quarter-turn rotations      |                          53126610 |
+| Full $`D_4`$                |                                 0 |
+| Total                       | 189627697916042276889063633686282 |
+
+Exact symmetry classes for the $`16\times16`$ punctured grid.
+<a id="tab:classes"></a>
+
+The class counts are nonnegative integers at every computed size. Their
+sum is $`O_n`$, and weighting them by the orbit sizes $`8,4,4,2,2`$
+recovers $`H_n`$. For $`n=2`$, there is instead one orbit with full
+$`D_4`$ stabilizer and orbit size one.
+
+# Finite-size comparison with intact grids
+
+Let $`C_n`$ count undirected Hamiltonian cycles on the intact
+$`2n\times2n`$ grid, as in OEIS A003763 . Both full counters reproduce
+its values for $`n\leq10`$; the OEIS b-file contains terms through
+$`n=13`$. Define
+``` math
+Q_n=\frac{H_n}{C_n},\qquad
+c_n=C_n^{1/(4n^2)},\qquad h_n=H_n^{1/(4n^2-4)}.
+```
+The same-footprint ratio $`Q_n`$ is not a probability of surviving
+vertex deletion: deleting vertices from an intact Hamiltonian cycle
+generally does not leave a Hamiltonian cycle. The per-vertex quantities
+$`c_n`$ and $`h_n`$ are finite-size growth estimators. Both vertex count
+and boundary corrections matter in interpreting them.
+
+For context, Jacobsen  reports the numerical estimate
+$`\mu=1.472801\pm0.00001`$ for the square-lattice Hamiltonian-walk
+connective constant, attributing it to Jacobsen and Kondev; his own
+circuit-and-walk analysis gives $`1.473\pm0.001`$ in Eq. (4.4). This is
+a numerical benchmark, not an exact constant or a proven limit for the
+punctured sequence considered here.
+
+| $`n`$ | $`H_n/C_n`$ | $`\log Q_n`$ |     $`c_n`$ |     $`h_n`$ |
+|------:|------------:|-------------:|------------:|------------:|
+|     3 | 0.013059701 | -4.338224012 | 1.213869718 | 1.085966682 |
+|     4 | 0.035377668 | -3.341674516 | 1.271048904 | 1.221570580 |
+|     5 | 0.020725521 | -3.876389441 | 1.308264601 | 1.270637022 |
+|     6 | 0.025894009 | -3.653743666 | 1.334201899 | 1.310584485 |
+|     7 | 0.020801394 | -3.872735292 | 1.353235262 | 1.334597523 |
+|     8 | 0.023026163 | -3.771124175 | 1.367762905 | 1.354161936 |
+|     9 | 0.020534244 | -3.885661351 | 1.379198061 | 1.368038963 |
+|    10 | 0.021749399 | -3.828169175 | 1.388423611 | 1.379631942 |
+
+Finite-size ratios and per-vertex growth estimators. <a id="tab:growth"></a>
+
+<figure id="fig:growth" data-latex-placement="htbp">
+<img src="figures/finite-size.png" alt="Manuscript figure" />
+<figcaption>Exact-count comparisons. Lines connect computed values only;
+no asymptotic curve is fitted.</figcaption>
+</figure>
+
+Over $`3\leq n\leq8`$, the even-$`n`$ ratios decrease and the odd-$`n`$
+ratios increase. The extension to $`n=9`$ reverses the latter trend:
+$`Q_9\approx0.020534244`$, below $`Q_7\approx0.020801394`$. Thus
+monotone convergence of the odd subsequence is not supported even by
+this modest extension. The hole deletes two vertices of each
+checkerboard color for every $`n`$, so color imbalance alone cannot
+explain the parity split. At $`n=8`$, the punctured count is about
+$`2.3026\%`$ of the intact count for the same outer board. The available
+finite-size values do not identify an asymptotic exponent or distinguish
+a constant prefactor from a slowly changing correction. The log ratio
+$`\log Q_n`$ measures the change in the logarithm of the number of
+configurations caused by the defect. Its negative can be viewed as a
+dimensionless defect free-energy cost. This observable removes the
+common outer footprint without introducing different per-vertex
+normalizations. Figure <a href="#fig:growth" data-reference-type="ref"
+data-reference="fig:growth">3</a> plots $`\log Q_n`$ separately by
+parity. Multiplying $`Q_n`$ by the numerical benchmark $`\mu^4`$ would
+compensate heuristically for four missing vertices; on the log scale
+this only adds $`4\log\mu`$. It does not establish a limiting defect
+cost. A constant limit, logarithmic correction, and parity-dependent
+corrections remain hypotheses to test with larger boards. No gluing
+argument proving equality of the bulk coefficients is supplied here.
+
+# Reproducibility and related work
+
+The public repository <https://github.com/jroell/punctured-grid-cycles>
+contains the source code, recorded data, and manuscript build
+instructions. The complete exact-count reference is commit
+[`2d0d15b`](https://github.com/jroell/punctured-grid-cycles/tree/2d0d15baa21d21f9436bcf5736be4969a0ad818f).
+
+## Verification
+
+The parenthesis and direct-partner frontier counters agree on all intact
+and punctured boards at every even side from $`2`$ through $`20`$. They
+share the integer type and the row-by-row decomposition, so these are
+separately encoded cross-checks, not wholly independent mathematical
+methods. Direct path enumeration checks the complete cycle sets at
+punctured sides $`4`$ and $`6`$, including all eight symmetry actions. A
+different Python checker branches on whole edge orbits and independently
+verifies $`R_2,R_4,F,B`$ through punctured side $`8`$. Additional runs
+of that checker verify $`R_4`$ and $`B`$ at sides $`10`$ and $`12`$.
+Larger fixed-set counts still rely on the quotient implementation and
+consistency checks, not an independent second enumeration. The intact
+results agree with OEIS A003763 .
+
+From a repository checkout, run
+
+    make all
+    make benchmark
+    make test
+    make flat BOOST_CPPFLAGS=-I/opt/homebrew/include
+    python3 scripts/verify_backends.py
+    python3 scripts/verify_more_symmetry.py
+    python3 scripts/extend.py --backend flat
+    python3 scripts/extend_symmetry.py
+    python3 scripts/verify_extension.py
+    uv sync --group paper
+    uv run --group paper python scripts/build_paper.py
+
+The optional Boost include path shown is for Homebrew on Apple Silicon;
+omit it when Boost headers are on the default compiler include path. The
+counters need a C++17 compiler supporting `unsigned __int128` and Python
+3.11 or later. The manuscript build additionally uses Tectonic and
+Pandoc; the Python document dependencies are pinned in `uv.lock`. The
+original full-board benchmark uses a $`300`$-second timeout per run. The
+symmetry counter stops after $`1800`$ seconds or fifty million active
+states. The original symmetry benchmark additionally has a
+$`260`$-second subprocess timeout. Larger raw runs have a
+$`1800`$-second timeout and a monitored $`48`$ GiB RSS ceiling; the RSS
+monitor polls every two seconds. Each small edge-orbit check has a
+$`60`$-second limit. All jobs run finite case lists. Counts are stored
+as decimal strings in JSON to avoid floating-point rounding. Timings and
+memory use may differ by platform.
+
+## Prior work and scope
+
+Wynn  counts symmetry classes for intact square grids and uses quadrant
+quotients for quarter-turn symmetry. Jacobsen  enumerates circuits,
+walks, and chains by transfer methods. Blanco and Zeilberger  give a
+recent fixed-width generating-function implementation. The present note
+applies these ideas to a specified central puncture and records a
+reproducible table through side $`20`$.
+
+OEIS searches for consecutive terms of both $`H_n`$ and $`O_n`$ returned
+no match on September 26, 2026. These searches and the literature check
+are not exhaustive and do not establish priority. No OEIS identifier or
+preprint identifier is asserted before it has been assigned.
+
+<div class="thebibliography">
+
+9 OEIS Foundation Inc., *The On-Line Encyclopedia of Integer Sequences*,
+entry [A003763](https://oeis.org/A003763), accessed September 26, 2026.
+E. Wynn, Enumeration of nonisomorphic Hamiltonian cycles on square grid
+graphs, preprint, 2014,
+[arXiv:1402.0545](https://arxiv.org/abs/1402.0545). J. L. Jacobsen,
+Exact enumeration of Hamiltonian circuits, walks, and chains in two and
+three dimensions, *J. Phys. A: Math. Theor.* **40** (2007), 14667–14678.
+[doi:10.1088/1751-8113/40/49/003](https://doi.org/10.1088/1751-8113/40/49/003).
+P. Blanco and D. Zeilberger, Counting (and randomly generating)
+Hamiltonian cycles in rectangular grids, preprint, 2026,
+[arXiv:2603.24315](https://arxiv.org/abs/2603.24315).
+
+</div>
