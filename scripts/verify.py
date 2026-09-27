@@ -119,10 +119,17 @@ def main():
         assert row['count']==reference[str(row['width']//2)], row
     print('PASS all intact-grid counts from both engines match OEIS A003763.',flush=True)
     for side in (4,6):
-        start=monotonic();actual=brute_cycles(side)
+        start=monotonic();actual=brute_cycles(side);dfs_seconds=monotonic()-start
         for field in ('raw','r90','r180','axis','diagonal','both_axes','orbits'):
             assert actual[field]==int(expected[side][field]),(side,field,actual[field],expected[side][field])
-        records.append({'method':'full DFS','side':side,'seconds':monotonic()-start,'values':actual})
+        for engine in ('parentheses','partners'):
+            for hole in (0,1):
+                run=subprocess.run([str(ROOT/'build'/engine),str(side),str(side),str(hole)],
+                                   capture_output=True,text=True,timeout=5,check=True)
+                got=json.loads(run.stdout)['count']
+                want=str(actual['raw']) if hole else reference[str(side//2)]
+                assert got==want,(engine,side,hole,'expected',want,'actual',got)
+        records.append({'method':'full DFS','side':side,'seconds':dfs_seconds,'values':actual})
         print(f'PASS full DFS {side}: {actual}',flush=True)
     for side in (4,6,8):
         for field,generators in [('r90',[1]),('r180',[2]),('axis',[4]),('both_axes',[4,5])]:
@@ -130,6 +137,15 @@ def main():
             assert answer==int(expected[side][field]),(side,field,answer,expected[side][field])
             records.append({'method':'edge-orbit search','side':side,'field':field,'value':answer,'nodes':nodes,'seconds':seconds})
             print(f'PASS edge-orbit {side} {field}: {answer}; {nodes} nodes; {seconds:.3f}s',flush=True)
+    for side in (4,6,8):
+        for mode,rotation,reflection in [('half','r180','axis'),('quarter','r90','both_axes')]:
+            run=subprocess.run([str(ROOT/'build/symmetry'),str(side//2),mode],
+                               capture_output=True,text=True,timeout=5,check=True)
+            got=json.loads(run.stdout)
+            for output,field in [('rotation',rotation),('reflection',reflection)]:
+                want=expected[side][field]
+                assert got[output]==want,(side,mode,field,'expected',want,'actual',got[output])
+    print('PASS current counter binaries match independently checked small cases.',flush=True)
     for engine in ('parentheses','partners'):
         for args in [('25','16','1'),('2','25','0'),('0','4','0'),('4','4','2'),('4x','4','0'),('5','5','1')]:
             p=subprocess.run([str(ROOT/'build'/engine),*args],capture_output=True,text=True,timeout=5)
