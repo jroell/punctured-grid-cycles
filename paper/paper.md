@@ -170,6 +170,15 @@ memory refer to punctured boards. Sides through $`16`$ use standard hash
 maps; larger sides use Boost flat maps, so timings are not directly
 comparable. <a id="tab:metrics"></a>
 
+The equal peaks from side $`10`$ onward occur after the hole rows in the
+punctured scans. At sides $`10,12,14,16`$, exact comparisons at the
+first punctured peak position find the same reachable frontier keys as
+on the intact board at that position. This does not imply equal state
+weights. Thus the hole’s restriction on reachable states has disappeared
+by those peaks. These comparisons concern the state sets, not merely
+their cardinalities; the analogous set equality at sides $`18`$ and
+$`20`$ has not been tested.
+
 At side $`16`$, the peak of 677,909 active states first occurs after row
 $`13`$, column $`13`$. The row-end maximum is $`349998`$. The two hash
 maps coexist during a transition; process RSS includes both maps, their
@@ -277,7 +286,11 @@ exchange of the quarter-turn. ◻
 </div>
 
 The empty case $`n=1`$ also has $`R_4=0`$ by convention. The deletion
-reverses the corresponding parity obstruction for intact grids .
+reverses the corresponding parity obstruction for intact grids : there
+the cycle length is $`4n^2`$, so the quarter-turn induces a shift by
+$`n^2`$ or $`3n^2`$ positions. When $`n`$ is even these shifts preserve
+color, whereas the geometric quarter-turn exchanges colors; hence the
+intact quarter-turn fixed count is zero for even $`n`$.
 
 <div class="samepage">
 
@@ -441,28 +454,48 @@ Finite-size ratios and per-vertex growth estimators. <a id="tab:growth"></a>
 no asymptotic curve is fitted.</figcaption>
 </figure>
 
-Over $`3\leq n\leq8`$, the even-$`n`$ ratios decrease and the odd-$`n`$
-ratios increase. The extension to $`n=9`$ reverses the latter trend:
-$`Q_9\approx0.020534244`$, below $`Q_7\approx0.020801394`$. Thus
-monotone convergence of the odd subsequence is not supported even by
-this modest extension. The hole deletes two vertices of each
-checkerboard color for every $`n`$, so color imbalance alone cannot
-explain the parity split. At $`n=8`$, the punctured count is about
-$`2.3026\%`$ of the intact count for the same outer board. The available
-finite-size values do not identify an asymptotic exponent or distinguish
-a constant prefactor from a slowly changing correction. The log ratio
-$`\log Q_n`$ measures the change in the logarithm of the number of
-configurations caused by the defect. Its negative can be viewed as a
-dimensionless defect free-energy cost. This observable removes the
-common outer footprint without introducing different per-vertex
-normalizations. Figure <a href="#fig:growth" data-reference-type="ref"
+For $`n=5,7,9`$, the odd-subsequence values of $`\log Q_n`$ are
+approximately $`-3.8764`$, $`-3.8727`$, and $`-3.8857`$: nearly flat on
+the scale of the observed even-subsequence variation. For
+$`n=4,6,8,10`$, the even values decrease through $`-3.3417`$,
+$`-3.6537`$, $`-3.7711`$, and $`-3.8282`$, with successive drops of
+$`0.3121`$, $`0.1174`$, and $`0.0570`$. These data are consistent with
+both parities approaching a common value around $`-3.88`$ to $`-3.89`$,
+with the even subsequence approaching from above. As a descriptive
+extrapolation only, continuing the last ratio of successive even drops,
+about $`0.486`$, gives a geometric-tail estimate near $`-3.882`$. Three
+drops do not establish a geometric correction or a limiting value. The
+hole deletes two vertices of each checkerboard color for every $`n`$, so
+color imbalance alone cannot explain the parity split. At $`n=8`$, the
+punctured count is about $`2.3026\%`$ of the intact count for the same
+outer board.
+
+The log ratio $`\log Q_n`$ measures the change in the logarithm of the
+number of configurations caused by the defect. Its negative can be
+viewed as a dimensionless defect free-energy cost. This observable
+removes the common outer footprint without introducing different
+per-vertex normalizations.
+Figure <a href="#fig:growth" data-reference-type="ref"
 data-reference="fig:growth">3</a> plots $`\log Q_n`$ separately by
 parity. Multiplying $`Q_n`$ by the numerical benchmark $`\mu^4`$ would
 compensate heuristically for four missing vertices; on the log scale
 this only adds $`4\log\mu`$. It does not establish a limiting defect
-cost. A constant limit, logarithmic correction, and parity-dependent
-corrections remain hypotheses to test with larger boards. No gluing
-argument proving equality of the bulk coefficients is supplied here.
+cost.
+
+There is also a physical reason to retain a power-law alternative.
+Hamiltonian polygons are fully packed (compact) polymers, for which
+critical scaling is described by the loop-model field theory of Jacobsen
+and Kondev . Compact-polymer universality must be distinguished from
+that of dense polymers with vacancies; their exponents need not agree.
+In a critical system a defect can carry a scaling dimension, so an
+algebraic contribution is plausible. If this hole produced
+$`Q_n\sim A n^{-x}`$, then $`\log Q_n=\log A-x\log n+o(1)`$, which could
+change slowly over the present range. The cited theory does not identify
+this hole with a particular scaling operator or determine its exponent.
+A constant limit, such a logarithmic term in $`\log Q_n`$, and
+parity-dependent corrections therefore remain hypotheses to test with
+larger boards. No gluing argument proving equality of the bulk
+coefficients is supplied here.
 
 # Reproducibility and related work
 
@@ -481,10 +514,11 @@ methods. Direct path enumeration checks the complete cycle sets at
 punctured sides $`4`$ and $`6`$, including all eight symmetry actions. A
 different Python checker branches on whole edge orbits and independently
 verifies $`R_2,R_4,F,B`$ through punctured side $`8`$. Additional runs
-of that checker verify $`R_4`$ and $`B`$ at sides $`10`$ and $`12`$.
-Larger fixed-set counts still rely on the quotient implementation and
-consistency checks, not an independent second enumeration. The intact
-results agree with OEIS A003763 .
+of that checker verify $`R_4`$ and $`B`$ at sides $`10`$ and $`12`$. In
+the repository, $`F`$ and $`R_2`$ at $`n\geq5`$, and $`R_4`$ and $`B`$
+at $`n\geq7`$, still rely on the quotient implementation and consistency
+checks, not an independent second enumeration. The intact results agree
+with OEIS A003763 .
 
 From a repository checkout, run
 
@@ -497,6 +531,7 @@ From a repository checkout, run
     python3 scripts/extend.py --backend flat
     python3 scripts/extend_symmetry.py
     python3 scripts/verify_extension.py
+    python3 scripts/verify_frontier_sets.py
     uv sync --group paper
     uv run --group paper python scripts/build_paper.py
 
@@ -539,6 +574,9 @@ graphs, preprint, 2014,
 Exact enumeration of Hamiltonian circuits, walks, and chains in two and
 three dimensions, *J. Phys. A: Math. Theor.* **40** (2007), 14667–14678.
 [doi:10.1088/1751-8113/40/49/003](https://doi.org/10.1088/1751-8113/40/49/003).
+J. L. Jacobsen and J. Kondev, Field theory of compact polymers on the
+square lattice, *Nucl. Phys. B* **532** (1998), 635–688.
+[doi:10.1016/S0550-3213(98)00571-9](https://doi.org/10.1016/S0550-3213(98)00571-9).
 P. Blanco and D. Zeilberger, Counting (and randomly generating)
 Hamiltonian cycles in rectangular grids, preprint, 2026,
 [arXiv:2603.24315](https://arxiv.org/abs/2603.24315).

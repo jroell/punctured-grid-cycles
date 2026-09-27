@@ -1,0 +1,135 @@
+{
+  "source": "src/parentheses.cpp",
+  "source_sha256": "6c162929f0664ebc5b578362af742afbd9f7cfdc0799ea0b33d794ace0c33318",
+  "scope": "First punctured peak position at each even side 10..16; no claim for untested layers or sizes.",
+  "checks": [
+    {
+      "side": 10,
+      "row": 9,
+      "column": 5,
+      "states": 2120,
+      "equal_key_sets": true,
+      "comparison": "byte-for-byte sorted uint64_t keys; weights excluded",
+      "runs": [
+        {
+          "height": 10,
+          "width": 10,
+          "hole": false,
+          "count": "467260456608",
+          "peak_states": 2120,
+          "peak_row": 6,
+          "peak_col": 6,
+          "seconds": 0.006898,
+          "max_rss_mib": 2.453
+        },
+        {
+          "height": 10,
+          "width": 10,
+          "hole": true,
+          "count": "9684216390",
+          "peak_states": 2120,
+          "peak_row": 9,
+          "peak_col": 5,
+          "seconds": 0.003167,
+          "max_rss_mib": 2.484
+        }
+      ]
+    },
+    {
+      "side": 12,
+      "row": 10,
+      "column": 10,
+      "states": 13943,
+      "equal_key_sets": true,
+      "comparison": "byte-for-byte sorted uint64_t keys; weights excluded",
+      "runs": [
+        {
+          "height": 12,
+          "width": 12,
+          "hole": false,
+          "count": "1076226888605605706",
+          "peak_states": 13943,
+          "peak_row": 7,
+          "peak_col": 6,
+          "seconds": 0.057184,
+          "max_rss_mib": 5.359
+        },
+        {
+          "height": 12,
+          "width": 12,
+          "hole": true,
+          "count": "27867828294632440",
+          "peak_states": 13943,
+          "peak_row": 10,
+          "peak_col": 10,
+          "seconds": 0.036143,
+          "max_rss_mib": 5.391
+        }
+      ]
+    },
+    {
+      "side": 14,
+      "row": 12,
+      "column": 7,
+      "states": 95660,
+      "equal_key_sets": true,
+      "comparison": "byte-for-byte sorted uint64_t keys; weights excluded",
+      "runs": [
+        {
+          "height": 14,
+          "width": 14,
+          "hole": false,
+          "count": "56126499620491437281263608",
+          "peak_states": 95660,
+          "peak_row": 8,
+          "peak_col": 8,
+          "seconds": 0.843691,
+          "max_rss_mib": 21.344
+        },
+        {
+          "height": 14,
+          "width": 14,
+          "hole": true,
+          "count": "1167509412814480584454378",
+          "peak_states": 95660,
+          "peak_row": 12,
+          "peak_col": 7,
+          "seconds": 0.476515,
+          "max_rss_mib": 24.422
+        }
+      ]
+    },
+    {
+      "side": 16,
+      "row": 13,
+      "column": 13,
+      "states": 677909,
+      "equal_key_sets": true,
+      "comparison": "byte-for-byte sorted uint64_t keys; weights excluded",
+      "runs": [
+        {
+          "height": 16,
+          "width": 16,
+          "hole": false,
+          "count": "65882516522625836326159786165530572",
+          "peak_states": 677909,
+          "peak_row": 9,
+          "peak_col": 8,
+          "seconds": 16.336613,
+          "max_rss_mib": 298.422
+        },
+        {
+          "height": 16,
+          "width": 16,
+          "hole": true,
+          "count": "1517021583328338160591145724550850",
+          "peak_states": 677909,
+          "peak_row": 13,
+          "peak_col": 13,
+          "seconds": 11.914929,
+          "max_rss_mib": 256.141
+        }
+      ]
+    }
+  ]
+}

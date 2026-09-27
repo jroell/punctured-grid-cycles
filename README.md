@@ -68,6 +68,7 @@ The two frontier implementations share the integer type and the row-by-row probl
 - `results/extension-flat.json`: full-counter runs at sides 18 and 20; adjacent text files hold row profiles.
 - `results/symmetry-extension.json`: fixed sets and symmetry classes at n=9 and n=10.
 - `results/extension-environment.json`: Boost version, source revisions, limits, and measurement conventions.
+- `results/frontier-set-verification.json`: exact frontier-key comparisons at punctured peak positions for sides 10, 12, 14, and 16.
 - `results/additional-verification.json`: independent quarter-turn and both-axis checks at sides 10 and 12.
 
 A peak state count is the maximum number of distinct states in one active layer, measured after every processed vertex. It is not the sum of the sizes of the two maps held during a transition. RSS includes the whole process and both maps. Timings are single observations on a shared workstation, not repeated isolated benchmarks.
@@ -106,6 +107,7 @@ python3 scripts/verify_more_symmetry.py
 python3 scripts/extend.py --backend flat
 python3 scripts/extend_symmetry.py
 python3 scripts/verify_extension.py
+python3 scripts/verify_frontier_sets.py
 ```
 
 On systems where Boost is in the compiler's default include path, use `make flat`. The optional backend uses `boost::unordered_flat_map`; it changes state aggregation only. All 46 established raw and symmetry runs are compared against the original backend, including peak-state counts. Extension records identify the backend, and the original standard-library build remains dependency-free. Re-run `extend_symmetry.py` after both raw counters finish to complete the Burnside and stabilizer checks.
